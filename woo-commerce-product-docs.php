@@ -16,8 +16,6 @@ function add_related_doc_tab() {
         'connected_type' => 'related_documents',
         'connected_items' => get_queried_object(),
         'nopaging' => true, 
-        'taxonomy' => 'docrepo_document_types',
-        'term' => $doc_type->name
     ) );
         
     if ( $connected->have_posts() ) : 
@@ -49,7 +47,8 @@ function related_doc_tab() {
             echo '<h4>' . $doc_type->name . '</h4>';
             echo '<ul>';
                 while ( $connected->have_posts() ) : $connected->the_post();
-                    echo '<li><a href="' . get_permalink() . '">' . get_the_title() . '</a></li>';
+                    $file = get_field('docrepo_upload_file');
+                    echo '<li><a href="' . $file['url'] . '" target="_blank">' . get_the_title() . '</a></li>';
                 endwhile;
             echo '</ul>';
         wp_reset_postdata();
@@ -150,7 +149,7 @@ function register_cpt_docrepo_document() {
         'show_ui' => true,
         'show_in_menu' => true,
         'show_in_nav_menus' => false,
-        'publicly_queryable' => true,
+        'publicly_queryable' => false,
         'exclude_from_search' => false,
         'has_archive' => false,
         'query_var' => true,
