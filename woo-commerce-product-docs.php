@@ -12,12 +12,23 @@ License: GPL2
 // Add WooCommerce tab to display documentation related to prodcuts
 add_filter( 'woocommerce_product_tabs', 'add_related_doc_tab' );
 function add_related_doc_tab() {
-    $tabs['related-docs'] = array(
-        'title'    => 'Documentation',
-        'priority' => 30,
-        'callback' => 'related_doc_tab'
-    );
-    return $tabs;
+    $connected = new WP_Query( array(
+        'connected_type' => 'related_documents',
+        'connected_items' => get_queried_object(),
+        'nopaging' => true, 
+        'taxonomy' => 'docrepo_document_types',
+        'term' => $doc_type->name
+    ) );
+        
+    if ( $connected->have_posts() ) : 
+        $tabs['related-docs'] = array(
+            'title'    => 'Documentation',
+            'priority' => 30,
+            'callback' => 'related_doc_tab'
+        );
+        return $tabs;
+    wp_reset_postdata();
+    endif;
 }
 
 function related_doc_tab() {
