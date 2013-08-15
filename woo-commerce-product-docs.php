@@ -12,6 +12,16 @@ License: GPL2
 // Include Shortcode to display Doc Selector on a page
 include_once( 'inc/shortcode.php' );
 
+// Enqueue Plugin Scripts
+function docrepo_enqueue() {
+    // Include the Chosen JQuery Plugin for cool multiselects
+    wp_enqueue_script( 'docrepo-chosen', plugins_url( '/js/chosen.jquery.min.js' , __FILE__ ), array( 'jquery' ), '1.0', false  );
+    wp_enqueue_style( 'docrepo-chosen', plugins_url( '/css/chosen.min.css' , __FILE__ ) );
+    wp_enqueue_script( 'product-docs', plugins_url( '/js/product-docs.js' , __FILE__ ), array( 'jquery', 'docrepo-chosen' ), '1.0', false  );
+}
+add_action( 'wp_enqueue_scripts', 'docrepo_enqueue' );
+
+
 // Add WooCommerce tab to display documentation related to prodcuts
 add_filter( 'woocommerce_product_tabs', 'add_related_doc_tab' );
 function add_related_doc_tab() {

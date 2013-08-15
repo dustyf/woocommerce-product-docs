@@ -9,32 +9,44 @@
 function docrepo_shortcode() {
 	// Get the current URL
 	$url = 'http://' . $_SERVER['HTTP_HOST']  . $_SERVER['REQUEST_URI']; ?>
-	<form id="doc-select" method="get" action ="<?php echo $url ?>">
-		<select multiple name="documenttype[]" form="doc-select">
-			<option selected="selected" value="all-documents">All Documents</option>
-			<?php $doc_types = get_terms( 'docrepo_document_types' );
-			foreach ($doc_types as $doc_type) { 
-				$docslug = $doc_type->slug;
-				$docname = $doc_type->name;
-				echo '<option value="' . $docslug . '">' . $docname . '</option>';
-			} ?>
-		</select>
-		<select multiple name="productselect[]" form="doc-select">
-			<option selected="selected" value="all-products">All Products</option>
-			<?php $args = array(
-				'post_type' => 'product',
-				'posts_per_page' => -1
-				);
-			$prods = new WP_Query( $args );
-			if ( $prods->have_posts() ) {
-				while ( $prods->have_posts() ) : $prods->the_post();
-					echo '<option value="' . get_the_ID() . '">' . get_the_title() . '</option>';
-				endwhile;
-			}
-			wp_reset_postdata(); ?>
-		</select>
-		<input type="submit">
-	</form>
+
+	<div class="doc-select-container">
+		<form id="doc-select" method="get" action ="<?php echo $url ?>">
+			<div class="doc-selection">
+			<h3>1. Select Document Types...</h3>
+				<select data-placeholder="Choose Document Types..." multiple="true" name="documenttype[]" form="doc-select" id="document-select" class="docrepo-chosen">
+					<option value="all-documents">All Documents</option>
+					<?php $doc_types = get_terms( 'docrepo_document_types' );
+					foreach ($doc_types as $doc_type) { 
+						$docslug = $doc_type->slug;
+						$docname = $doc_type->name;
+						echo '<option value="' . $docslug . '">' . $docname . '</option>';
+					} ?>
+				</select>
+			</div>
+			<div class="prod-selection">
+				<h3>2. Select Products...</h3>
+				<select data-placeholder="Choose Products..." multiple="true" name="productselect[]" form="doc-select" id="product-select" class="docrepo-chosen">
+					<option value="all-products">All Products</option>
+					<?php $args = array(
+						'post_type' => 'product',
+						'posts_per_page' => -1
+						);
+					$prods = new WP_Query( $args );
+					if ( $prods->have_posts() ) {
+						while ( $prods->have_posts() ) : $prods->the_post();
+							echo '<option value="' . get_the_ID() . '">' . get_the_title() . '</option>';
+						endwhile;
+					}
+					wp_reset_postdata(); ?>
+				</select>
+			</div>
+			<div class="submit-container">
+				<h3>3. Hit Go to Find Your Documents!</h3>
+				<input type="submit" value="Go">
+			</div>
+		</form>
+	</div>
 
 	<?php if ( !empty( $_GET['documenttype'] ) && !empty( $_GET['productselect'] ) ) { 
 
@@ -67,7 +79,8 @@ function docrepo_shortcode() {
 						if ( $connected->have_posts() ) {
 							while ( $connected->have_posts() ) : $connected->the_post();
 								echo '<tr>';
-								echo '<td>' . get_the_title() . '</td>';
+								$file = get_field('docrepo_upload_file');
+								echo '<td><a href="' . $file['url'] . '" target="_blank">' . get_the_title() . '</a></td>';
 								echo '</tr>';
 							endwhile;
 						} else {
@@ -95,7 +108,8 @@ function docrepo_shortcode() {
 						if ( $connected->have_posts() ) {
 							while ( $connected->have_posts() ) : $connected->the_post();
 								echo '<tr>';
-								echo '<td>' . get_the_title() . '</td>';
+								$file = get_field('docrepo_upload_file');
+								echo '<td><a href="' . $file['url'] . '" target="_blank">' . get_the_title() . '</a></td>';
 								echo '</tr>';
 							endwhile;
 						} else {
@@ -131,7 +145,8 @@ function docrepo_shortcode() {
 						if ( $connected->have_posts() ) {
 							while ( $connected->have_posts() ) : $connected->the_post();
 								echo '<tr>';
-								echo '<td>' . get_the_title() . '</td>';
+								$file = get_field('docrepo_upload_file');
+								echo '<td><a href="' . $file['url'] . '" target="_blank">' . get_the_title() . '</a></td>';
 								echo '</tr>';
 							endwhile;
 						} else {
@@ -160,7 +175,8 @@ function docrepo_shortcode() {
 						if ( $connected->have_posts() ) {
 							while ( $connected->have_posts() ) : $connected->the_post();
 								echo '<tr>';
-								echo '<td>' . get_the_title() . '</td>';
+								$file = get_field('docrepo_upload_file');
+								echo '<td><a href="' . $file['url'] . '" target="_blank">' . get_the_title() . '</a></td>';
 								echo '</tr>';
 							endwhile;
 						} else {
