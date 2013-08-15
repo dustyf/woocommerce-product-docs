@@ -9,6 +9,9 @@ Author URI: http://dustyf.com
 License: GPL2
 */
 
+// Include Shortcode to display Doc Selector on a page
+include_once( 'inc/shortcode.php' );
+
 // Add WooCommerce tab to display documentation related to prodcuts
 add_filter( 'woocommerce_product_tabs', 'add_related_doc_tab' );
 function add_related_doc_tab() {
